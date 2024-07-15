@@ -40,7 +40,13 @@ goto :menu
 cls
 echo GCC_MINGW Compiler ## Normal Mode
 echo.
-@gcc -std=c89 -I./include -m32 "src/cube.c" -L./ -lvulkan-1 -o vk_cube_gcc.exe 
+@gcc -std=c89 -I./include -m32 "src/cube.c" -L./ -lvulkan-1 -lgdi32 -o vk_cube_gcc.exe ^
+-DVK_USE_PLATFORM_WIN32_KHR ^
+-DVK_PROTOTYPES ^
+-D_CRT_SECURE_NO_WARNINGS ^
+-D_USE_MATH_DEFINES ^
+-D_DEBUG ^
+-D_WINDOWS 
 echo.
 echo.
 pause
