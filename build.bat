@@ -18,7 +18,7 @@ cls
 echo Open Watcom Compiler ## Debug and Otimize Mode
 echo x32_80387
 echo.
-@wcc386 /6r -fp6 -ms -bm -ol -om -op -ot -oz -zkl -zdp -zi -ot -hc -hd -hw -oh "src/cube.c" -i=include ^
+@wcc386 /6r -fp6 -ms -bm -ol -om -op -ot -oz -zkl -zdp -zi -ot -hc -hd -hw -oh "src/cube.c" -i="src/include" ^
 -DVK_USE_PLATFORM_WIN32_KHR ^
 -DVK_PROTOTYPES ^
 -D_CRT_SECURE_NO_WARNINGS ^
@@ -31,6 +31,9 @@ echo.
 
 @wlink name vk_cube_wat.exe debug watcom lines file *.obj  Library vulkan-1.lib ^
 	 	 2>&1 | findstr /V /C:"Open Watcom" /C:"Portions" /C:"See"
+
+del cube.obj
+del cube.err
 echo.
 echo.
 pause
@@ -40,7 +43,7 @@ goto :menu
 cls
 echo GCC_MINGW Compiler ## Normal Mode
 echo.
-@gcc -std=c89 -I./include -m32 "src/cube.c" -L./ -lvulkan-1 -lgdi32 -o vk_cube_gcc.exe ^
+@gcc -std=c89 -I./src/include -m32 "src/cube.c" -L./ -lvulkan-1 -lgdi32 -o vk_cube_gcc.exe ^
 -DVK_USE_PLATFORM_WIN32_KHR ^
 -DVK_PROTOTYPES ^
 -D_CRT_SECURE_NO_WARNINGS ^
@@ -72,7 +75,8 @@ REM @wlink name vk_cube.exe debug watcom lines file *.obj  Library vulkan-1.lib
 rem echo.
 
 
-
+del cube.obj
+del cube.err
 
 
 

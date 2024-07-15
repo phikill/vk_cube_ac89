@@ -1110,7 +1110,8 @@ static void demo_draw_build_cmd(struct demo *demo, VkCommandBuffer cmd_buf)
     assert(!err);
     vkCmdBeginRenderPass(cmd_buf, &rp_begin, VK_SUBPASS_CONTENTS_INLINE);
 
-    if (demo->validate) {
+    if (demo->validate) 
+    {
         label.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
         label.pNext = NULL;
         label.pLabelName = "InsideRenderPass";
@@ -1157,7 +1158,8 @@ static void demo_draw_build_cmd(struct demo *demo, VkCommandBuffer cmd_buf)
     scissor.offset.y = 0;
     vkCmdSetScissor(cmd_buf, 0, 1, &scissor);
 
-    if (demo->validate) {
+    if (demo->validate) 
+    {
         label.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT;
         label.pNext = NULL;
         label.pLabelName = "ActualDraw";
@@ -1276,13 +1278,22 @@ void demo_build_image_ownership_cmd(struct demo *demo, int i)
     image_ownership_barrier.subresourceRange.layerCount = 1;
 
 
-    vkCmdPipelineBarrier(demo->swapchain_image_resources[i].graphics_to_present_cmd, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-                         VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 0, 0, NULL, 0, NULL, 1, &image_ownership_barrier);
+    vkCmdPipelineBarrier(demo->swapchain_image_resources[i].graphics_to_present_cmd, 
+                         VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+                         VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, 
+                         0, 
+                         0, 
+                         NULL, 
+                         0, 
+                         NULL, 
+                         1, 
+                         &image_ownership_barrier);
     err = vkEndCommandBuffer(demo->swapchain_image_resources[i].graphics_to_present_cmd);
     assert(!err);
 }
 
-void demo_update_data_buffer(struct demo *demo) {
+void demo_update_data_buffer(struct demo *demo) 
+{
     mat4x4 MVP, Model, VP;
     int matrixSize = sizeof(MVP);
 
@@ -2021,6 +2032,7 @@ static void demo_prepare_depth(struct demo *demo)
         .flags = 0,
     };
 */
+        memset(&image, 0, sizeof(VkImageCreateInfo));
         image.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
         image.pNext = NULL;
         image.imageType = VK_IMAGE_TYPE_2D;
@@ -2254,6 +2266,7 @@ static void demo_prepare_texture_image(struct demo              *demo,
         .initialLayout = VK_IMAGE_LAYOUT_PREINITIALIZED,
     };
 */
+    memset(&image_create_info, 0, sizeof(VkImageCreateInfo));
     image_create_info.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
     image_create_info.pNext = NULL;
     image_create_info.imageType = VK_IMAGE_TYPE_2D;
@@ -2873,14 +2886,13 @@ static void demo_prepare_descriptor_pool(struct demo *demo)
     VkResult U_ASSERT_ONLY err;
  
 
-
         type_counts[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         type_counts[0].descriptorCount = demo->swapchainImageCount;
         /**/
         type_counts[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         type_counts[1].descriptorCount = demo->swapchainImageCount * DEMO_TEXTURE_COUNT;
 
-
+        memset(&descriptor_pool, 0, sizeof(VkDescriptorPoolCreateInfo));
         descriptor_pool.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         descriptor_pool.pNext = NULL;
         descriptor_pool.maxSets = demo->swapchainImageCount;
