@@ -19,6 +19,12 @@ echo Open Watcom Compiler ## Debug and Otimize Mode
 echo x32_80387
 echo.
 @wcc386 /6r -fp6 -ms -bm -ol -om -op -ot -oz -zkl -zdp -zi -ot -hc -hd -hw -oh "src/cube.c" -i=include ^
+-DVK_USE_PLATFORM_WIN32_KHR ^
+-DVK_PROTOTYPES ^
+-D_CRT_SECURE_NO_WARNINGS ^
+-D_USE_MATH_DEFINES ^
+-D_DEBUG ^
+-D_WINDOWS ^
  	 2>&1 | findstr /V /C:"Open Watcom" /C:"Portions" /C:"See" 
 echo.
 echo.
