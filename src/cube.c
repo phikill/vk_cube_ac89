@@ -781,6 +781,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debug_messenger_callback(VkDebugUtilsMessageSever
 
     in_callback = true;
     if (!demo->suppress_popups) MessageBox(NULL, message, "Alert", MB_OK);
+    printf("\n ================== \n %s \n ================= \n", message);
     in_callback = false;
 
 #elif defined(ANDROID)
@@ -1875,6 +1876,7 @@ static void demo_prepare_buffers(struct demo *demo)
         .clipped = true,
     };
 */
+    memset(&swapchain_ci, 0, sizeof(VkSwapchainCreateInfoKHR));
     swapchain_ci.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     swapchain_ci.pNext = NULL;
     swapchain_ci.surface = demo->surface;
@@ -2428,7 +2430,7 @@ static void demo_prepare_textures(struct demo *demo) {
             .unnormalizedCoordinates = VK_FALSE,
         };
 */
-
+        memset(&sampler, 0, sizeof(VkSamplerCreateInfo));
         sampler.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
         sampler.pNext = NULL;
         sampler.magFilter = VK_FILTER_NEAREST;
@@ -2464,7 +2466,7 @@ static void demo_prepare_textures(struct demo *demo) {
             .flags = 0,
         };
 */
-
+        memset(&view, 0, sizeof(VkImageViewCreateInfo));
         view.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         view.pNext = NULL;
         view.image = VK_NULL_HANDLE;
@@ -2589,7 +2591,7 @@ static void demo_prepare_descriptor_layout(struct demo *demo)
         .pBindings = layout_bindings,
     };
 */
-
+    memset(&descriptor_layout, 0, sizeof(VkDescriptorSetLayoutCreateInfo));
     descriptor_layout.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
     descriptor_layout.pNext = NULL;
     descriptor_layout.bindingCount = 2;
@@ -2607,7 +2609,7 @@ static void demo_prepare_descriptor_layout(struct demo *demo)
         .pSetLayouts = &demo->desc_layout,
     };
 */
-
+    memset(&pPipelineLayoutCreateInfo, 0, sizeof(VkPipelineLayoutCreateInfo));
     pPipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
     pPipelineLayoutCreateInfo.pNext = NULL;
     pPipelineLayoutCreateInfo.setLayoutCount = 1;
@@ -2957,7 +2959,7 @@ static void demo_prepare_framebuffers(struct demo *demo)
 
         attachments[1] = demo->depth.view;
 
-
+    memset(&fb_info, 0, sizeof(VkFramebufferCreateInfo));
     fb_info.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
     fb_info.pNext = NULL;
     fb_info.renderPass = demo->render_pass;
@@ -3427,6 +3429,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,
 static void demo_create_window(struct demo *demo) 
 {
     WNDCLASSEX win_class;
+    RECT wr;
 
     /* Initialize the window class structure: */
     win_class.cbSize = sizeof(WNDCLASSEX);
@@ -3450,7 +3453,12 @@ static void demo_create_window(struct demo *demo)
         exit(1);
     }
     /* Create window with the registered class: */
-    RECT wr = {0, 0, demo->width, demo->height};
+    /* RECT wr = {0, 0, demo->width, demo->height};
+    */
+    wr.left = 0;
+    wr.top = 0;
+    wr.right = demo->width;
+    wr.bottom = demo->height;
     AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE);
     demo->window = CreateWindowEx(0,
                                   demo->name,            /* class name */
@@ -4286,6 +4294,7 @@ static void demo_init_vk(struct demo *demo)
         .apiVersion = VK_API_VERSION_1_0,
     };
 */
+
         app.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
         app.pNext = NULL;
         app.pApplicationName = APP_SHORT_NAME;
@@ -4304,7 +4313,7 @@ static void demo_init_vk(struct demo *demo)
         .ppEnabledExtensionNames = (const char *const *)demo->extension_names,
     };
 */
-
+        memset(&inst_info, 0, sizeof(VkInstanceCreateInfo));
         inst_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         inst_info.pNext = NULL;
         inst_info.pApplicationInfo = &app;
@@ -4318,7 +4327,8 @@ static void demo_init_vk(struct demo *demo)
      * After the instance is created, we use the instance-based
      * function to register the final callback.
      */
-    if (demo->validate) {
+    if (demo->validate) 
+    {
         /* VK_EXT_debug_utils style */
         dbg_messenger_create_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
         dbg_messenger_create_info.pNext = NULL;
@@ -4509,7 +4519,8 @@ static void demo_init_vk(struct demo *demo)
         free(device_extensions);
     }
 
-    if (!swapchainExtFound) {
+    if (!swapchainExtFound) 
+    {
         ERR_EXIT("vkEnumerateDeviceExtensionProperties failed to find the " VK_KHR_SWAPCHAIN_EXTENSION_NAME
                  " extension.\n\nDo you have a compatible Vulkan installable client driver (ICD) installed?\n"
                  "Please look at the Getting Started guide for additional information.\n",
@@ -5263,6 +5274,59 @@ static void demo_init(struct demo *demo, int argc, char **argv)
 /* Include header required for parsing the command line options. */
 #include <shellapi.h>
 
+
+#include <stdlib.h>
+#include <wchar.h>
+#include <errno.h>
+
+int my_wcstombs_s(size_t *pNumConverted, 
+                  char *mbstr, 
+                  size_t sizeInBytes, 
+                  const wchar_t *wcstr, 
+                  size_t count) 
+{
+    size_t i = 0;
+
+    /* Verificar entradas inválidas */
+    if (!mbstr || !wcstr || !pNumConverted || sizeInBytes == 0) 
+    {
+        if (mbstr) 
+        {
+            mbstr[0] = '\0';
+        }
+        return EINVAL;
+    }
+
+    for (i = 0; i < count && i < sizeInBytes - 1; i++) 
+    {
+        int res = wctomb(&mbstr[i], wcstr[i]);
+        if (res == -1) 
+        {
+            /* Erro de conversão */
+            mbstr[i] = '\0';
+            return EILSEQ;
+        }
+        if (wcstr[i] == L'\0') 
+        {
+            break;
+        }
+    }
+
+    /* Garantir a terminação nula */
+    mbstr[i] = '\0';
+
+    /* Definir o número de caracteres convertidos */
+    *pNumConverted = i;
+
+    /* Verificar se todos os caracteres foram convertidos */
+    if (i == count && wcstr[i] != L'\0') 
+    {
+        return ERANGE;
+    }
+
+    return 0; /* Sucesso */
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, 
                    HINSTANCE hPrevInstance, 
                    LPSTR pCmdLine, 
@@ -5272,6 +5336,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
     bool done;  /* flag saying when app is complete */
     int argc;
     char **argv;
+    LPWSTR *commandLineArgs;
+    int iii = 0;
+
 
     /* Ensure wParam is initialized. */
     msg.wParam = 0;
@@ -5283,7 +5350,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
        with the non-Windows side.  So, we have to convert the information to
        Ascii character strings.
     */
-    LPWSTR *commandLineArgs = CommandLineToArgvW(GetCommandLineW(), &argc);
+    commandLineArgs = CommandLineToArgvW(GetCommandLineW(), &argc);
     if (NULL == commandLineArgs) 
     {
         argc = 0;
@@ -5298,7 +5365,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
         } 
         else 
         {
-            for (int iii = 0; iii < argc; iii++) 
+            for (iii = 0; iii < argc; iii++) 
             {
                 size_t wideCharLen = wcslen(commandLineArgs[iii]);
                 size_t numConverted = 0;
@@ -5306,7 +5373,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
                 argv[iii] = (char *)malloc(sizeof(char) * (wideCharLen + 1));
                 if (argv[iii] != NULL) 
                 {
+                    /*
                     wcstombs_s(&numConverted, 
+                               argv[iii], 
+                               wideCharLen + 1, 
+                               commandLineArgs[iii], 
+                               wideCharLen + 1);
+                    */
+                 my_wcstombs_s(&numConverted, 
                                argv[iii], 
                                wideCharLen + 1, 
                                commandLineArgs[iii], 
@@ -5325,7 +5399,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     /* Free up the items we had to allocate for the command line arguments. */
     if (argc > 0 && argv != NULL) 
     {
-        for (int iii = 0; iii < argc; iii++) 
+        for (iii = 0; iii < argc; iii++) 
         {
             if (argv[iii] != NULL) 
             {

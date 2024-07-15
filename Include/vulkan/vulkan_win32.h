@@ -276,7 +276,14 @@ typedef struct VkSurfaceCapabilitiesFullScreenExclusiveEXT {
     VkBool32           fullScreenExclusiveSupported;
 } VkSurfaceCapabilitiesFullScreenExclusiveEXT;
 
-typedef struct VkSurfaceFullScreenExclusiveWin32InfoEXT {
+#ifdef __WATCOMC__
+    #ifndef HMONITOR
+        typedef void* HMONITOR;
+    #endif
+#endif /* __WATCOMC__ */
+
+typedef struct VkSurfaceFullScreenExclusiveWin32InfoEXT 
+{
     VkStructureType    sType;
     const void*        pNext;
     HMONITOR           hmonitor;
