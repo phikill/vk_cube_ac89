@@ -1,29 +1,23 @@
 # vk_cube_ansi_C89
-#### Vulkan cube Demo, but attempt to switch to the C89.  
+#### Vulkan cube Demo, but I downgraded to the ANSI C 89 standard.
 
-
-## I don't understand.  
-### this works with visual studio.  
+## Works Fine !...
   
+
+to compile you can use an x32/386 compiler or higher.  
+
+To start the program, you need a GPU compatible with Vulkan drivers.  
+
 ## Used Compilers  
 (MinGW.org GCC-6.3.0-1) 6.3.0   
 Open Watcom 1.9  
 
-## Error Message  
- With Open Watcom   
-``` 
- Selected GPU 0: NVIDIA GeForce GTX 1060 3GB, type: 2
- Assertion Failed: !err, function demo_create_surface, file src/cube.c, line 4687.
- ABNORMAL TERMINATION
-```
-With GCC
 
-``` 
-Selected GPU 0: NVIDIA GeForce GTX 1060 3GB, type: 2
-Assertion failed: !err, file src/cube.c, line 4687
-```
+#### !! I did it during my free lunch time. Maybe there are errors that I didn't see in the code, maybe it can't work on your computer
 
 
-same error, I even tested it on clang and it gave the same thing.  
+## Why made for the c89?
 
-but in visual studio replacing all the files from the standard c demo the code works.  
+because it's easier for me to understand this pattern, and also because of watcom  
+
+## [ALERT !] : I only tested on Windows.
