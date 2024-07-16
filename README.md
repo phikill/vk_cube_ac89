@@ -25,10 +25,10 @@ because it's easier for me to understand this pattern, and also because of watco
 
 
 # !! [ERRORS]
- Hardware : GTX 1060 = 0
- Hardware : Intel(R) HD Graphics 530 = 1
+ Hardware : GTX 1060 = 0  
+ Hardware : Intel(R) HD Graphics 530 = 1  
 
-
+  
 Intel(R) HD Graphics 530 :  
 VK_SDK: 1.3.283.0  
 ``` 
