@@ -26,6 +26,10 @@ because it's easier for me to understand this pattern, and also because of watco
 
 # !! [ERRORS]
  Hardware : GTX 1060 = 0  
+
+Geforce GTX 1060 :
+VK_SDK 1.2.182.0
+
  Hardware : Intel(R) HD Graphics 530 = 1  
 
   
