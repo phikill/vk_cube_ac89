@@ -200,7 +200,8 @@ struct vktexcube_vs_uniform
 /* Mesh and VertexFormat Data
 /*--------------------------------------------------------------------------------------
 /* clang-format off */
-static const float g_vertex_buffer_data[] = {
+static const float g_vertex_buffer_data[] = 
+{
     -1.0f,-1.0f,-1.0f,  /* -X side */
     -1.0f,-1.0f, 1.0f,
     -1.0f, 1.0f, 1.0f,
@@ -244,7 +245,8 @@ static const float g_vertex_buffer_data[] = {
      1.0f, 1.0f, 1.0f,
 };
 
-static const float g_uv_buffer_data[] = {
+static const float g_uv_buffer_data[] = 
+{
     0.0f, 1.0f,  /* -X side */
     1.0f, 1.0f,
     1.0f, 0.0f,
@@ -705,33 +707,51 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debug_messenger_callback(VkDebugUtilsMessageSever
         #endif
     }
 
-    if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT) {
+    if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT) 
+    {
         strcat(prefix, "VERBOSE : ");
-    } else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT) {
+    } 
+    else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT) 
+    {
         strcat(prefix, "INFO : ");
-    } else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+    } 
+    else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) 
+    {
         strcat(prefix, "WARNING : ");
-    } else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) {
+    } 
+    else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) 
+    {
         strcat(prefix, "ERROR : ");
     }
 
-    if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT) {
+    if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT) 
+    {
         strcat(prefix, "GENERAL");
-    } else {
-        if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT) {
+    } 
+    else 
+    {
+        if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT) 
+        {
             strcat(prefix, "VALIDATION");
             validation_error = 1;
         }
-        if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT) {
-            if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT) {
+        if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT) 
+        {
+            if (messageType & VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT) 
+            {
                 strcat(prefix, "|");
             }
             strcat(prefix, "PERFORMANCE");
         }
     }
 
-    sprintf(message, "%s - Message Id Number: %d | Message Id Name: %s\n\t%s\n", prefix, pCallbackData->messageIdNumber,
-            pCallbackData->pMessageIdName, pCallbackData->pMessage);
+    sprintf(message, 
+            "%s - Message Id Number: %d | Message Id Name: %s\n\t%s\n", 
+            prefix, 
+            pCallbackData->messageIdNumber,
+            pCallbackData->pMessageIdName, 
+            pCallbackData->pMessage);
+
     if (pCallbackData->objectCount > 0) 
     {
         char tmp_message[500];
@@ -739,7 +759,8 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debug_messenger_callback(VkDebugUtilsMessageSever
         strcat(message, tmp_message);
         for (object = 0; object < pCallbackData->objectCount; ++object) 
         {
-            if (NULL != pCallbackData->pObjects[object].pObjectName && strlen(pCallbackData->pObjects[object].pObjectName) > 0) 
+            if (NULL != pCallbackData->pObjects[object].pObjectName && 
+                strlen(pCallbackData->pObjects[object].pObjectName) > 0) 
             {
                 sprintf(tmp_message, 
                         "\t\tObject[%d] - %s, Handle %p, Name \"%s\"\n", 
@@ -768,10 +789,15 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debug_messenger_callback(VkDebugUtilsMessageSever
         char tmp_message[500];
         sprintf(tmp_message, "\n\tCommand Buffer Labels - %d\n", pCallbackData->cmdBufLabelCount);
         strcat(message, tmp_message);
-        for (cmd_buf_label = 0; cmd_buf_label < pCallbackData->cmdBufLabelCount; ++cmd_buf_label) {
-            sprintf(tmp_message, "\t\tLabel[%d] - %s { %f, %f, %f, %f}\n", cmd_buf_label,
-                    pCallbackData->pCmdBufLabels[cmd_buf_label].pLabelName, pCallbackData->pCmdBufLabels[cmd_buf_label].color[0],
-                    pCallbackData->pCmdBufLabels[cmd_buf_label].color[1], pCallbackData->pCmdBufLabels[cmd_buf_label].color[2],
+        for (cmd_buf_label = 0; cmd_buf_label < pCallbackData->cmdBufLabelCount; ++cmd_buf_label) 
+ {
+            sprintf(tmp_message, 
+                    "\t\tLabel[%d] - %s { %f, %f, %f, %f}\n", 
+                    cmd_buf_label,
+                    pCallbackData->pCmdBufLabels[cmd_buf_label].pLabelName, 
+                    pCallbackData->pCmdBufLabels[cmd_buf_label].color[0],
+                    pCallbackData->pCmdBufLabels[cmd_buf_label].color[1], 
+                    pCallbackData->pCmdBufLabels[cmd_buf_label].color[2],
                     pCallbackData->pCmdBufLabels[cmd_buf_label].color[3]);
             strcat(message, tmp_message);
         }
@@ -847,7 +873,8 @@ bool ActualTimeLate(uint64_t desired, uint64_t actual, uint64_t rdur)
 }
 bool CanPresentEarlier(uint64_t earliest, uint64_t actual, uint64_t margin, uint64_t rdur) 
 {
-    if (earliest < actual) {
+    if (earliest < actual) 
+    {
         /* Consider whether this present could have occured earlier.  Make sure */
         /* that earliest time was at least 2msec earlier than actual time, and */
         /* that the margin was at least 2msec: */
@@ -876,7 +903,8 @@ static bool memory_type_from_properties(struct demo *demo,
     /* Search memtypes to find first index with those properties */
     for (i = 0; i < VK_MAX_MEMORY_TYPES; i++) 
     {
-        if ((typeBits & 1) == 1) {
+        if ((typeBits & 1) == 1) 
+        {
             /* Type is available, does it match user properties? */
             if ((demo->memory_properties.memoryTypes[i].propertyFlags & requirements_mask) == requirements_mask) 
             {
@@ -1171,7 +1199,8 @@ static void demo_draw_build_cmd(struct demo *demo, VkCommandBuffer cmd_buf)
     }
 
     vkCmdDraw(cmd_buf, 12 * 3, 1, 0, 0);
-    if (demo->validate) {
+    if (demo->validate) 
+    {
         demo->CmdEndDebugUtilsLabelEXT(cmd_buf);
     }
 
@@ -1308,7 +1337,8 @@ void demo_update_data_buffer(struct demo *demo)
     memcpy(demo->swapchain_image_resources[demo->current_buffer].uniform_memory_ptr, (const void *)&MVP[0][0], matrixSize);
 }
 
-void DemoUpdateTargetIPD(struct demo *demo) {
+void DemoUpdateTargetIPD(struct demo *demo) 
+{
     /* Look at what happened to previous presents, and make appropriate */
     /* adjustments in timing: */
     VkResult U_ASSERT_ONLY err;
@@ -1331,8 +1361,10 @@ void DemoUpdateTargetIPD(struct demo *demo) {
 
 
 
-        for (i = 0; i < count; i++) {
-            if (!demo->syncd_with_actual_presents) {
+        for (i = 0; i < count; i++) 
+        {
+            if (!demo->syncd_with_actual_presents) 
+            {
                 /* This is the first time that we've received an */
                 /* actualPresentTime for this swapchain.  In order to not */
                 /* perceive these early frames as "late", we need to sync-up */
@@ -1347,13 +1379,16 @@ void DemoUpdateTargetIPD(struct demo *demo) {
                 demo->syncd_with_actual_presents = true;
                 break;
             } 
-            else if (CanPresentEarlier(past[i].earliestPresentTime, past[i].actualPresentTime, past[i].presentMargin,
-                                         demo->refresh_duration)) 
+            else if (CanPresentEarlier(past[i].earliestPresentTime, 
+                                       past[i].actualPresentTime, 
+                                       past[i].presentMargin,
+                                       demo->refresh_duration)) 
             {
                 /* This image could have been presented earlier.  We don't want */
                 /* to decrease the target_IPD until we've seen early presents */
                 /* for at least two seconds. */
-                if (demo->last_early_id == past[i].presentID) {
+                if (demo->last_early_id == past[i].presentID) 
+                {
                     /* We've now seen two seconds worth of early presents. */
                     /* Flag it as such, and reset the counter: */
                     early = true;
@@ -1419,14 +1454,16 @@ void DemoUpdateTargetIPD(struct demo *demo) {
             /* TODO(ianelliott): Try to calculate a better target_IPD based     */
             /* on the most recently-seen present (this is overly-simplistic).   */
             demo->refresh_duration_multiplier--;
-            if (demo->refresh_duration_multiplier == 0) {
+            if (demo->refresh_duration_multiplier == 0) 
+            {
                 /* This should never happen, but in case it does, don't */
                 /* try to go faster. */
                 demo->refresh_duration_multiplier = 1;
             }
             demo->target_IPD = demo->refresh_duration * demo->refresh_duration_multiplier;
         }
-        if (late) {
+        if (late) 
+        {
             /* Since we found a new instance of a late present, we want to */
             /* increase the target_IPD (i.e. decrease the frame rate): */
             /**/
@@ -1461,11 +1498,15 @@ static void demo_draw(struct demo *demo)
     vkResetFences(demo->device, 1, &demo->fences[demo->frame_index]);
 
 
-    do {
+    do 
+    {
         /* Get the index of the next available swapchain image: */
-        err =
-            demo->fpAcquireNextImageKHR(demo->device, demo->swapchain, UINT64_MAX,
-                                        demo->image_acquired_semaphores[demo->frame_index], VK_NULL_HANDLE, &demo->current_buffer);
+        err = demo->fpAcquireNextImageKHR(demo->device, 
+                                          demo->swapchain, 
+                                          UINT64_MAX,
+                                          demo->image_acquired_semaphores[demo->frame_index], 
+                                          VK_NULL_HANDLE, 
+                                          &demo->current_buffer);
 
         if (err == VK_ERROR_OUT_OF_DATE_KHR) 
         {
@@ -2060,7 +2101,6 @@ static void demo_prepare_depth(struct demo *demo)
     };
 */
         memset(&view, 0, sizeof(VkImageViewCreateInfo));
-
         view.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
         view.pNext = NULL;
         view.image = VK_NULL_HANDLE;
@@ -2111,7 +2151,11 @@ static void demo_prepare_depth(struct demo *demo)
 
 /* Convert ppm image data from header file into RGBA texture image */
 #include "lunarg.ppm.h"
-bool loadTexture(const char *filename, uint8_t *rgba_data, VkSubresourceLayout *layout, int32_t *width, int32_t *height) 
+bool loadTexture(const char *filename, 
+                 uint8_t *rgba_data, 
+                 VkSubresourceLayout *layout, 
+                 int32_t *width, 
+                 int32_t *height) 
 {
     char *cPtr;
     int x, y;
@@ -2151,7 +2195,10 @@ bool loadTexture(const char *filename, uint8_t *rgba_data, VkSubresourceLayout *
     return true;
 }
 
-static void demo_prepare_texture_buffer(struct demo *demo, const char *filename, struct texture_object *tex_obj) {
+static void demo_prepare_texture_buffer(struct demo *demo, 
+                                        const char *filename, 
+                                        struct texture_object *tex_obj) 
+{
     int32_t tex_width;
     int32_t tex_height;
     VkResult U_ASSERT_ONLY err;
@@ -2329,14 +2376,16 @@ static void demo_prepare_texture_image(struct demo              *demo,
     tex_obj->imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 }
 
-static void demo_destroy_texture(struct demo *demo, struct texture_object *tex_objs) {
+static void demo_destroy_texture(struct demo *demo, struct texture_object *tex_objs) 
+{
     /* clean up staging resources */
     vkFreeMemory(demo->device, tex_objs->mem, NULL);
     if (tex_objs->image) vkDestroyImage(demo->device, tex_objs->image, NULL);
     if (tex_objs->buffer) vkDestroyBuffer(demo->device, tex_objs->buffer, NULL);
 }
 
-static void demo_prepare_textures(struct demo *demo) {
+static void demo_prepare_textures(struct demo *demo) 
+{
     const VkFormat tex_format = VK_FORMAT_R8G8B8A8_UNORM;
     VkFormatProperties props;
     uint32_t i;
@@ -2578,7 +2627,8 @@ static void demo_prepare_descriptor_layout(struct demo *demo)
     VkResult U_ASSERT_ONLY err;
     VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo;
 
-    const VkDescriptorSetLayoutBinding layout_bindings[2] = {
+    const VkDescriptorSetLayoutBinding layout_bindings[2] = 
+    {
         [0] =
             {
                 .binding = 0,
@@ -2744,16 +2794,18 @@ static VkShaderModule demo_prepare_shader_module(struct demo *demo,
 
 static void demo_prepare_vs(struct demo *demo) 
 {
-    const uint32_t vs_code[] = {
-#include "cube.vert.inc"
-    };
+    const uint32_t vs_code[] = 
+     {
+       #include "cube.vert.inc"
+     };
     demo->vert_shader_module = demo_prepare_shader_module(demo, vs_code, sizeof(vs_code));
 }
 
 static void demo_prepare_fs(struct demo *demo) 
 {
-    const uint32_t fs_code[] = {
-#include "cube.frag.inc"
+    const uint32_t fs_code[] = 
+    {
+       #include "cube.frag.inc"
     };
     demo->frag_shader_module = demo_prepare_shader_module(demo, fs_code, sizeof(fs_code));
 }
@@ -3582,11 +3634,14 @@ static void demo_handle_xlib_event(struct demo *demo, const XEvent *event) {
     }
 }
 
-static void demo_run_xlib(struct demo *demo) {
-    while (!demo->quit) {
+static void demo_run_xlib(struct demo *demo) 
+{
+    while (!demo->quit) 
+    {
         XEvent event;
 
-        if (demo->pause) {
+        if (demo->pause) 
+        {
             XNextEvent(demo->display, &event);
             demo_handle_xlib_event(demo, &event);
         }
@@ -3753,50 +3808,62 @@ static void handle_surface_configure(void *data,
 
 static const struct xdg_surface_listener xdg_surface_listener = {handle_surface_configure};
 
-static void handle_toplevel_configure(void *data, struct xdg_toplevel *xdg_toplevel UNUSED, int32_t width, int32_t height,
-                                      struct wl_array *states UNUSED) {
+static void handle_toplevel_configure(void *data, 
+                                      struct xdg_toplevel *xdg_toplevel UNUSED, 
+                                      int32_t width, 
+                                      int32_t height,
+                                      struct wl_array *states UNUSED) 
+{
     struct demo *demo = (struct demo *)data;
     /* zero values imply the program may choose its own size, so in that case
      * stay with the existing value (which on startup is the default) 
     */
-    if (width > 0) {
+    if (width > 0) 
+    {
         demo->width = width;
     }
-    if (height > 0) {
+    if (height > 0) 
+    {
         demo->height = height;
     }
     /* This should be followed by a surface configure */
 }
 
-static void handle_toplevel_close(void *data, struct xdg_toplevel *xdg_toplevel UNUSED) {
+static void handle_toplevel_close(void *data, struct xdg_toplevel *xdg_toplevel UNUSED) 
+{
     struct demo *demo = (struct demo *)data;
     demo->quit = true;
 }
 
 static const struct xdg_toplevel_listener xdg_toplevel_listener = {handle_toplevel_configure, handle_toplevel_close};
 
-static void demo_create_window(struct demo *demo) {
-    if (!demo->xdg_wm_base) {
+static void demo_create_window(struct demo *demo) 
+{
+    if (!demo->xdg_wm_base) 
+    {
         printf("Compositor did not provide the standard protocol xdg-wm-base\n");
         fflush(stdout);
         exit(1);
     }
 
     demo->window = wl_compositor_create_surface(demo->compositor);
-    if (!demo->window) {
+    if (!demo->window) 
+    {
         printf("Can not create wayland_surface from compositor!\n");
         fflush(stdout);
         exit(1);
     }
 
     demo->xdg_surface = xdg_wm_base_get_xdg_surface(demo->xdg_wm_base, demo->window);
-    if (!demo->xdg_surface) {
+    if (!demo->xdg_surface) 
+    {
         printf("Can not get xdg_surface from wayland_surface!\n");
         fflush(stdout);
         exit(1);
     }
     demo->xdg_toplevel = xdg_surface_get_toplevel(demo->xdg_surface);
-    if (!demo->xdg_toplevel) {
+    if (!demo->xdg_toplevel) 
+    {
         printf("Can not allocate xdg_toplevel for xdg_surface!\n");
         fflush(stdout);
         exit(1);
@@ -3814,7 +3881,8 @@ static void demo_create_window(struct demo *demo) {
     wl_surface_commit(demo->window);
 }
 #elif defined(VK_USE_PLATFORM_DIRECTFB_EXT)
-static void demo_create_directfb_window(struct demo *demo) {
+static void demo_create_directfb_window(struct demo *demo) 
+{
     DFBResult ret;
 
     ret = DirectFBInit(NULL, NULL);
@@ -3837,7 +3905,8 @@ static void demo_create_directfb_window(struct demo *demo) {
     desc.width = demo->width;
     desc.height = demo->height;
     ret = demo->dfb->CreateSurface(demo->dfb, &desc, &demo->window);
-    if (ret) {
+    if (ret) 
+    {
         printf("CreateSurface failed to create DirectFB surface interface!\n");
         fflush(stdout);
         exit(1);
@@ -3876,13 +3945,17 @@ static void demo_handle_directfb_event(struct demo *demo,
 
 static void demo_run_directfb(struct demo *demo) 
 {
-    while (!demo->quit) {
+    while (!demo->quit) 
+    {
         DFBInputEvent event;
 
-        if (demo->pause) {
+        if (demo->pause) 
+        {
             demo->event_buffer->WaitForEvent(demo->event_buffer);
             if (!demo->event_buffer->GetEvent(demo->event_buffer, DFB_EVENT(&event))) demo_handle_directfb_event(demo, &event);
-        } else {
+        } 
+        else 
+        {
             if (!demo->event_buffer->GetEvent(demo->event_buffer, DFB_EVENT(&event))) demo_handle_directfb_event(demo, &event);
 
             demo_draw(demo);
@@ -3892,17 +3965,20 @@ static void demo_run_directfb(struct demo *demo)
     }
 }
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
-static void demo_run(struct demo *demo) {
+static void demo_run(struct demo *demo) 
+{
     if (!demo->prepared) return;
 
     demo_draw(demo);
     demo->curFrame++;
 }
 #elif defined(VK_USE_PLATFORM_METAL_EXT)
-static void demo_run(struct demo *demo) {
+static void demo_run(struct demo *demo) 
+{
     demo_draw(demo);
     demo->curFrame++;
-    if (demo->frameCount != INT32_MAX && demo->curFrame == demo->frameCount) {
+    if (demo->frameCount != INT32_MAX && demo->curFrame == demo->frameCount) 
+    {
         demo->quit = TRUE;
     }
 }
@@ -3975,7 +4051,8 @@ static VkResult demo_create_display_surface(struct demo *demo)
         err = vkGetDisplayPlaneSupportedDisplaysKHR(demo->gpu, plane_index, &supported_count, NULL);
         assert(!err);
 
-        if (supported_count == 0) {
+        if (supported_count == 0) 
+        {
             continue;
         }
 
@@ -3987,7 +4064,8 @@ static VkResult demo_create_display_surface(struct demo *demo)
 
         for (uint32_t i = 0; i < supported_count; i++) 
         {
-            if (supported_displays[i] == display) {
+            if (supported_displays[i] == display) 
+            {
                 found_plane = VK_TRUE;
                 break;
             }
@@ -4001,7 +4079,8 @@ static VkResult demo_create_display_surface(struct demo *demo)
         }
     }
 
-    if (!found_plane) {
+    if (!found_plane) 
+    {
         printf("Cannot find a plane compatible with the display!\n");
         fflush(stdout);
         exit(1);
@@ -4013,14 +4092,17 @@ static VkResult demo_create_display_surface(struct demo *demo)
     vkGetDisplayPlaneCapabilitiesKHR(demo->gpu, mode_props.displayMode, plane_index, &planeCaps);
     /* Find a supported alpha mode */
     VkDisplayPlaneAlphaFlagBitsKHR alphaMode = VK_DISPLAY_PLANE_ALPHA_OPAQUE_BIT_KHR;
-    VkDisplayPlaneAlphaFlagBitsKHR alphaModes[4] = {
+    VkDisplayPlaneAlphaFlagBitsKHR alphaModes[4] = 
+    {
         VK_DISPLAY_PLANE_ALPHA_OPAQUE_BIT_KHR,
         VK_DISPLAY_PLANE_ALPHA_GLOBAL_BIT_KHR,
         VK_DISPLAY_PLANE_ALPHA_PER_PIXEL_BIT_KHR,
         VK_DISPLAY_PLANE_ALPHA_PER_PIXEL_PREMULTIPLIED_BIT_KHR,
     };
-    for (uint32_t i = 0; i < sizeof(alphaModes); i++) {
-        if (planeCaps.supportedAlpha & alphaModes[i]) {
+    for (uint32_t i = 0; i < sizeof(alphaModes); i++) 
+    {
+        if (planeCaps.supportedAlpha & alphaModes[i]) 
+        {
             alphaMode = alphaModes[i];
             break;
         }
@@ -4042,12 +4124,15 @@ static VkResult demo_create_display_surface(struct demo *demo)
     return vkCreateDisplayPlaneSurfaceKHR(demo->inst, &create_info, NULL, &demo->surface);
 }
 
-static void demo_run_display(struct demo *demo) {
-    while (!demo->quit) {
+static void demo_run_display(struct demo *demo) 
+{
+    while (!demo->quit) 
+    {
         demo_draw(demo);
         demo->curFrame++;
 
-        if (demo->frameCount != INT32_MAX && demo->curFrame == demo->frameCount) {
+        if (demo->frameCount != INT32_MAX && demo->curFrame == demo->frameCount) 
+        {
             demo->quit = true;
         }
     }
@@ -4077,7 +4162,8 @@ static VkBool32 demo_check_layers(uint32_t          check_count,
                 break;
             }
         }
-        if (!found) {
+        if (!found) 
+        {
             fprintf(stderr, "Cannot find layer: %s\n", check_names[i]);
             return 0;
         }
@@ -4085,15 +4171,21 @@ static VkBool32 demo_check_layers(uint32_t          check_count,
     return 1;
 }
 #if defined(VK_USE_PLATFORM_DISPLAY_KHR)
-int find_display_gpu(int gpu_number, uint32_t gpu_count, VkPhysicalDevice *physical_devices) {
+int find_display_gpu(int gpu_number, uint32_t gpu_count, VkPhysicalDevice *physical_devices) 
+{
     uint32_t display_count = 0;
     VkResult result;
     int gpu_return = gpu_number;
-    if (gpu_number >= 0) {
+    
+    if (gpu_number >= 0) 
+    {
         result = vkGetPhysicalDeviceDisplayPropertiesKHR(physical_devices[gpu_number], &display_count, NULL);
         assert(!result);
-    } else {
-        for (uint32_t i = 0; i < gpu_count; i++) {
+    } 
+    else 
+    {
+        for (uint32_t i = 0; i < gpu_count; i++) 
+        {
             result = vkGetPhysicalDeviceDisplayPropertiesKHR(physical_devices[i], &display_count, NULL);
             assert(!result);
             if (display_count) {
@@ -4142,21 +4234,24 @@ static void demo_init_vk(struct demo *demo)
         err = vkEnumerateInstanceLayerProperties(&instance_layer_count, NULL);
         assert(!err);
 
-        if (instance_layer_count > 0) {
+        if (instance_layer_count > 0) 
+        {
             VkLayerProperties *instance_layers = malloc(sizeof(VkLayerProperties) * instance_layer_count);
             err = vkEnumerateInstanceLayerProperties(&instance_layer_count, instance_layers);
             assert(!err);
 
             validation_found = demo_check_layers(ARRAY_SIZE(instance_validation_layers), instance_validation_layers,
                                                  instance_layer_count, instance_layers);
-            if (validation_found) {
+            if (validation_found) 
+            {
                 demo->enabled_layer_count = ARRAY_SIZE(instance_validation_layers);
                 demo->enabled_layers[0] = "VK_LAYER_KHRONOS_validation";
             }
             free(instance_layers);
         }
 
-        if (!validation_found) {
+        if (!validation_found) 
+        {
             ERR_EXIT(
                 "vkEnumerateInstanceLayerProperties failed to find required validation layer.\n\n"
                 "Please look at the Getting Started guide for additional information.\n",
@@ -4183,51 +4278,62 @@ static void demo_init_vk(struct demo *demo)
                 demo->extension_names[demo->enabled_extension_count++] = VK_KHR_SURFACE_EXTENSION_NAME;
             }
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
-            if (!strcmp(VK_KHR_WIN32_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) {
+            if (!strcmp(VK_KHR_WIN32_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) 
+            {
                 platformSurfaceExtFound = 1;
                 demo->extension_names[demo->enabled_extension_count++] = VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
             }
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
-            if (!strcmp(VK_KHR_XLIB_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) {
+            if (!strcmp(VK_KHR_XLIB_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) 
+            {
                 platformSurfaceExtFound = 1;
                 demo->extension_names[demo->enabled_extension_count++] = VK_KHR_XLIB_SURFACE_EXTENSION_NAME;
             }
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
-            if (!strcmp(VK_KHR_XCB_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) {
+            if (!strcmp(VK_KHR_XCB_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) 
+            {
                 platformSurfaceExtFound = 1;
                 demo->extension_names[demo->enabled_extension_count++] = VK_KHR_XCB_SURFACE_EXTENSION_NAME;
             }
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
-            if (!strcmp(VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) {
+            if (!strcmp(VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) 
+            {
                 platformSurfaceExtFound = 1;
                 demo->extension_names[demo->enabled_extension_count++] = VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME;
             }
 #elif defined(VK_USE_PLATFORM_DIRECTFB_EXT)
-            if (!strcmp(VK_EXT_DIRECTFB_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) {
+            if (!strcmp(VK_EXT_DIRECTFB_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) 
+            {
                 platformSurfaceExtFound = 1;
                 demo->extension_names[demo->enabled_extension_count++] = VK_EXT_DIRECTFB_SURFACE_EXTENSION_NAME;
             }
 #elif defined(VK_USE_PLATFORM_DISPLAY_KHR)
-            if (!strcmp(VK_KHR_DISPLAY_EXTENSION_NAME, instance_extensions[i].extensionName)) {
+            if (!strcmp(VK_KHR_DISPLAY_EXTENSION_NAME, instance_extensions[i].extensionName)) 
+            {
                 platformSurfaceExtFound = 1;
                 demo->extension_names[demo->enabled_extension_count++] = VK_KHR_DISPLAY_EXTENSION_NAME;
             }
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
-            if (!strcmp(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) {
+            if (!strcmp(VK_KHR_ANDROID_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) 
+            {
                 platformSurfaceExtFound = 1;
                 demo->extension_names[demo->enabled_extension_count++] = VK_KHR_ANDROID_SURFACE_EXTENSION_NAME;
             }
 #elif defined(VK_USE_PLATFORM_METAL_EXT)
-            if (!strcmp(VK_EXT_METAL_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) {
+            if (!strcmp(VK_EXT_METAL_SURFACE_EXTENSION_NAME, instance_extensions[i].extensionName)) 
+            {
                 platformSurfaceExtFound = 1;
                 demo->extension_names[demo->enabled_extension_count++] = VK_EXT_METAL_SURFACE_EXTENSION_NAME;
             }
 #endif
-            if (!strcmp(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME, instance_extensions[i].extensionName)) {
+            if (!strcmp(VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME, instance_extensions[i].extensionName)) 
+            {
                 demo->extension_names[demo->enabled_extension_count++] = VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME;
             }
-            if (!strcmp(VK_EXT_DEBUG_UTILS_EXTENSION_NAME, instance_extensions[i].extensionName)) {
-                if (demo->validate) {
+            if (!strcmp(VK_EXT_DEBUG_UTILS_EXTENSION_NAME, instance_extensions[i].extensionName)) 
+            {
+                if (demo->validate) 
+                {
                     demo->extension_names[demo->enabled_extension_count++] = VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
                 }
             }
@@ -4237,14 +4343,16 @@ static void demo_init_vk(struct demo *demo)
         free(instance_extensions);
     }
 
-    if (!surfaceExtFound) {
+    if (!surfaceExtFound) 
+    {
         ERR_EXIT("vkEnumerateInstanceExtensionProperties failed to find the " VK_KHR_SURFACE_EXTENSION_NAME
                  " extension.\n\n"
                  "Do you have a compatible Vulkan installable client driver (ICD) installed?\n"
                  "Please look at the Getting Started guide for additional information.\n",
                  "vkCreateInstance Failure");
     }
-    if (!platformSurfaceExtFound) {
+    if (!platformSurfaceExtFound) 
+    {
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
         ERR_EXIT("vkEnumerateInstanceExtensionProperties failed to find the " VK_KHR_WIN32_SURFACE_EXTENSION_NAME
                  " extension.\n\n"
@@ -4356,17 +4464,22 @@ static void demo_init_vk(struct demo *demo)
     }
 
     err = vkCreateInstance(&inst_info, NULL, &demo->inst);
-    if (err == VK_ERROR_INCOMPATIBLE_DRIVER) {
+    if (err == VK_ERROR_INCOMPATIBLE_DRIVER) 
+    {
         ERR_EXIT(
             "Cannot find a compatible Vulkan installable client driver (ICD).\n\n"
             "Please look at the Getting Started guide for additional information.\n",
             "vkCreateInstance Failure");
-    } else if (err == VK_ERROR_EXTENSION_NOT_PRESENT) {
+    } 
+    else if (err == VK_ERROR_EXTENSION_NOT_PRESENT) 
+    {
         ERR_EXIT(
             "Cannot find a specified extension library.\n"
             "Make sure your layers path is set appropriately.\n",
             "vkCreateInstance Failure");
-    } else if (err) {
+    } 
+    else if (err) 
+    {
         ERR_EXIT(
             "vkCreateInstance failed.\n\n"
             "Do you have a compatible Vulkan installable client driver (ICD) installed?\n"
@@ -4390,14 +4503,16 @@ static void demo_init_vk(struct demo *demo)
     physical_devices = malloc(sizeof(VkPhysicalDevice) * gpu_count);
     err = vkEnumeratePhysicalDevices(demo->inst, &gpu_count, physical_devices);
     assert(!err);
-    if (demo->gpu_number >= 0 && !((uint32_t)demo->gpu_number < gpu_count)) {
+    if (demo->gpu_number >= 0 && !((uint32_t)demo->gpu_number < gpu_count)) 
+    {
         fprintf(stderr, "GPU %d specified is not present, GPU count = %u\n", demo->gpu_number, gpu_count);
         ERR_EXIT("Specified GPU number is not present", "User Error");
     }
 
 #if defined(VK_USE_PLATFORM_DISPLAY_KHR)
     demo->gpu_number = find_display_gpu(demo->gpu_number, gpu_count, physical_devices);
-    if (demo->gpu_number < 0) {
+    if (demo->gpu_number < 0) 
+    {
         printf("Cannot find any display!\n");
         fflush(stdout);
         exit(1);
@@ -4466,7 +4581,8 @@ static void demo_init_vk(struct demo *demo)
     err = vkEnumerateDeviceExtensionProperties(demo->gpu, NULL, &device_extension_count, NULL);
     assert(!err);
 
-    if (device_extension_count > 0) {
+    if (device_extension_count > 0) 
+    {
         VkExtensionProperties *device_extensions = malloc(sizeof(VkExtensionProperties) * device_extension_count);
         err = vkEnumerateDeviceExtensionProperties(demo->gpu, NULL, &device_extension_count, device_extensions);
         assert(!err);
@@ -4478,13 +4594,15 @@ static void demo_init_vk(struct demo *demo)
                 swapchainExtFound = 1;
                 demo->extension_names[demo->enabled_extension_count++] = VK_KHR_SWAPCHAIN_EXTENSION_NAME;
             }
-            if (!strcmp("VK_KHR_portability_subset", device_extensions[i].extensionName)) {
+            if (!strcmp("VK_KHR_portability_subset", device_extensions[i].extensionName)) 
+            {
                 demo->extension_names[demo->enabled_extension_count++] = "VK_KHR_portability_subset";
             }
             assert(demo->enabled_extension_count < 64);
         }
 
-        if (demo->VK_KHR_incremental_present_enabled) {
+        if (demo->VK_KHR_incremental_present_enabled) 
+        {
             /* Even though the user "enabled" the extension via the command
                line, we must make sure that it's enumerated for use with the
                device.  Therefore, disable it here, and re-enable it again if
@@ -4493,14 +4611,16 @@ static void demo_init_vk(struct demo *demo)
             demo->VK_KHR_incremental_present_enabled = false;
             for (i = 0; i < device_extension_count; i++) 
             {
-                if (!strcmp(VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME, device_extensions[i].extensionName)) {
+                if (!strcmp(VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME, device_extensions[i].extensionName)) 
+                {
                     demo->extension_names[demo->enabled_extension_count++] = VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME;
                     demo->VK_KHR_incremental_present_enabled = true;
                     DbgMsg("VK_KHR_incremental_present extension enabled\n");
                 }
                 assert(demo->enabled_extension_count < 64);
             }
-            if (!demo->VK_KHR_incremental_present_enabled) {
+            if (!demo->VK_KHR_incremental_present_enabled) 
+            {
                 DbgMsg("VK_KHR_incremental_present extension NOT AVAILABLE\n");
             }
         }
@@ -4523,7 +4643,8 @@ static void demo_init_vk(struct demo *demo)
                 }
                 assert(demo->enabled_extension_count < 64);
             }
-            if (!demo->VK_GOOGLE_display_timing_enabled) {
+            if (!demo->VK_GOOGLE_display_timing_enabled) 
+            {
                 DbgMsg("VK_GOOGLE_display_timing extension NOT AVAILABLE\n");
             }
         }
@@ -4539,7 +4660,8 @@ static void demo_init_vk(struct demo *demo)
                  "vkCreateInstance Failure");
     }
 
-    if (demo->validate) {
+    if (demo->validate) 
+    {
         /* Setup VK_EXT_debug_utils function pointers always (we use them for
            debug labels and names).
         */
@@ -4565,7 +4687,8 @@ static void demo_init_vk(struct demo *demo)
         }
 
         err = demo->CreateDebugUtilsMessengerEXT(demo->inst, &dbg_messenger_create_info, NULL, &demo->dbg_messenger);
-        switch (err) {
+        switch (err) 
+        {
             case VK_SUCCESS:
                 break;
             case VK_ERROR_OUT_OF_HOST_MEMORY:
@@ -4716,12 +4839,16 @@ static VkSurfaceFormatKHR pick_surface_format(const VkSurfaceFormatKHR *surfaceF
     uint32_t i;
 
     /* Prefer non-SRGB formats... */
-    for (i = 0; i < count; i++) {
+    for (i = 0; i < count; i++) 
+    {
         const VkFormat format = surfaceFormats[i].format;
 
-        if (format == VK_FORMAT_R8G8B8A8_UNORM || format == VK_FORMAT_B8G8R8A8_UNORM ||
-            format == VK_FORMAT_A2B10G10R10_UNORM_PACK32 || format == VK_FORMAT_A2R10G10B10_UNORM_PACK32 ||
-            format == VK_FORMAT_R16G16B16A16_SFLOAT) {
+        if (format == VK_FORMAT_R8G8B8A8_UNORM           || 
+            format == VK_FORMAT_B8G8R8A8_UNORM           ||
+            format == VK_FORMAT_A2B10G10R10_UNORM_PACK32 || 
+            format == VK_FORMAT_A2R10G10B10_UNORM_PACK32 ||
+            format == VK_FORMAT_R16G16B16A16_SFLOAT) 
+        {
             return surfaceFormats[i];
         }
     }
@@ -4816,9 +4943,12 @@ static void demo_init_vk_swapchain(struct demo *demo)
 
     vkGetDeviceQueue(demo->device, demo->graphics_queue_family_index, 0, &demo->graphics_queue);
 
-    if (!demo->separate_present_queue) {
+    if (!demo->separate_present_queue) 
+    {
         demo->present_queue = demo->graphics_queue;
-    } else {
+    } 
+    else 
+    {
         vkGetDeviceQueue(demo->device, demo->present_queue_family_index, 0, &demo->present_queue);
     }
 
@@ -5078,21 +5208,24 @@ static void registry_handle_global_remove(void *data UNUSED, struct wl_registry 
 static const struct wl_registry_listener registry_listener = {registry_handle_global, registry_handle_global_remove};
 #endif
 
-static void demo_init_connection(struct demo *demo) {
+static void demo_init_connection(struct demo *demo) 
+{
 #if defined(VK_USE_PLATFORM_XCB_KHR)
     const xcb_setup_t *setup;
     xcb_screen_iterator_t iter;
     int scr;
 
     const char *display_envar = getenv("DISPLAY");
-    if (display_envar == NULL || display_envar[0] == '\0') {
+    if (display_envar == NULL || display_envar[0] == '\0') 
+    {
         printf("Environment variable DISPLAY requires a valid value.\nExiting ...\n");
         fflush(stdout);
         exit(1);
     }
 
     demo->connection = xcb_connect(NULL, &scr);
-    if (xcb_connection_has_error(demo->connection) > 0) {
+    if (xcb_connection_has_error(demo->connection) > 0) 
+    {
         printf("Cannot find a compatible Vulkan installable client driver (ICD).\nExiting ...\n");
         fflush(stdout);
         exit(1);
